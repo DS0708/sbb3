@@ -1,0 +1,117 @@
+package com.mysite.sbb;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@SpringBootTest
+public class QuestionTests {
+    private String first_subject = "sbb가 무엇인가요?";
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    @AfterEach
+    void tearDown(){
+        questionRepository.deleteAll();
+    }
+
+    void question_when_dataset(){
+        Question q1 = new Question();
+        q1.setId(1);
+        q1.setSubject(first_subject);
+        q1.setContent("sbb에 대해서 알고 싶습니다.");
+        q1.setCreateDate(LocalDateTime.now());
+        this.questionRepository.save(q1);
+
+        Question q2 = new Question();
+        q1.setId(2);
+        q2.setSubject("스프링부트 모델 질문입니다.");
+        q2.setContent("id는 자동으로 생성되나요?");
+        q2.setCreateDate(LocalDateTime.now());
+        this.questionRepository.save(q2);  // 두번째 질문 저장
+    }
+
+    @Test
+    void testJpa_save() {
+        question_when_dataset();
+    }
+
+    @Test
+    void testJpa_findAll() {
+        question_when_dataset();
+
+        List<Question> all = this.questionRepository.findAll();
+        assertEquals(2, all.size());
+
+        Question q = all.get(0);
+        assertEquals("sbb가 무엇인가요?", q.getSubject());
+    }
+
+    @Test
+    void testJpa_findById(){
+        question_when_dataset();
+
+        Optional<Question> oq = this.questionRepository.findById(1);
+//		Optional은 null 처리를 유연하게 처리하기 위해 사용하는 클래스로 위와 같이 isPresent로 null이 아닌지를 확인한 후에 get으로 실제 Question 객체 값을 얻어야 한다.
+        if(oq.isPresent()) {
+            Question q = oq.get();
+            assertEquals("sbb가 무엇인가요?", q.getSubject());
+        }
+    }
+    @Test
+    void testJpa_findBySubject(){
+        question_when_dataset();
+
+        Question q = this.questionRepository.findBySubject(first_subject);
+        assertEquals(first_subject, q.getSubject());
+    }
+
+    @Test
+    void testJpa_findBySubjectAndContent(){
+        question_when_dataset();
+
+        Question q = this.questionRepository.findBySubjectAndContent(
+                "sbb가 무엇인가요?", "sbb에 대해서 알고 싶습니다.");
+        assertEquals("sbb가 무엇인가요?", q.getSubject());
+    }
+
+    @Test
+    void testJpa_findBySubjectLike(){
+        question_when_dataset();
+
+        List<Question> qList = this.questionRepository.findBySubjectLike("sbb%");
+        Question q = qList.get(0);
+        assertEquals("sbb가 무엇인가요?", q.getSubject());
+    }
+
+    @Test
+    void testJpa_update(){
+        question_when_dataset();
+
+        String update_subject = "수정된 제목";
+        Question q = this.questionRepository.findBySubject(first_subject);
+        q.setSubject(update_subject);
+        this.questionRepository.save(q);
+
+        Question update_q = this.questionRepository.findBySubject(update_subject);
+        assertEquals(update_subject,update_q.getSubject());
+    }
+
+    @Test
+    void testJpa_delete(){
+        question_when_dataset();
+
+        assertEquals(2, this.questionRepository.count());
+        Question q = this.questionRepository.findBySubject(first_subject);
+        this.questionRepository.delete(q);
+        assertEquals(1, this.questionRepository.count());
+    }
+}
