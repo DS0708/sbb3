@@ -24,19 +24,18 @@ public class QuestionTests {
     }
 
     void question_when_dataset(){
-        Question q1 = new Question();
-        q1.setId(1);
-        q1.setSubject(first_subject);
-        q1.setContent("sbb에 대해서 알고 싶습니다.");
-        q1.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q1);
+        this.questionRepository.save(Question.builder()
+                .subject(first_subject)
+                .content("sbb에 대해서 알고 싶습니다.")
+                .createDate(LocalDateTime.now())
+                .build()); //First question
 
-        Question q2 = new Question();
-        q1.setId(2);
-        q2.setSubject("스프링부트 모델 질문입니다.");
-        q2.setContent("id는 자동으로 생성되나요?");
-        q2.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q2);  // 두번째 질문 저장
+        this.questionRepository.save(Question.builder()
+                .subject("스프링부트 모델 질문입니다.")
+                .content("id는 자동으로 생성되나요?")
+                .createDate(LocalDateTime.now())
+                .build()); //Second Question
+
     }
 
     @Test
@@ -98,7 +97,7 @@ public class QuestionTests {
 
         String update_subject = "수정된 제목";
         Question q = this.questionRepository.findBySubject(first_subject);
-        q.setSubject(update_subject);
+        q.updateSubject(update_subject);
         this.questionRepository.save(q);
 
         Question update_q = this.questionRepository.findBySubject(update_subject);
