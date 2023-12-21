@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +21,12 @@ public class AnswerTests {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @AfterEach
+    void tearDown(){
+        questionRepository.deleteAll();
+        answerRepository.deleteAll();
+    }
+
     private String first_subject = "sbb가 무엇인가요?";
     void question_given(){
         this.questionRepository.save(Question.builder()
@@ -28,18 +35,19 @@ public class AnswerTests {
                 .createDate(LocalDateTime.now())
                 .build()); //First question
 
-        this.questionRepository.save(Question.builder()
+        Question secondQuestion = this.questionRepository.save(Question.builder()
                 .subject("스프링부트 모델 질문입니다.")
                 .content("id는 자동으로 생성되나요?")
                 .createDate(LocalDateTime.now())
                 .build()); //Second Question
+
+        this.answerRepository.save(Answer.builder()
+                .content("네 자동으로 생성됩니다.")
+                .createDate(LocalDateTime.now())
+                .question(secondQuestion)
+                .build()); // Answer for the second question
     }
 
-    @AfterEach
-    void tearDown(){
-        questionRepository.deleteAll();
-        answerRepository.deleteAll();
-    }
 
     @Test
     void testJpa_SaveAnswer(){
@@ -48,18 +56,12 @@ public class AnswerTests {
         String given_answer = "네 자동으로 생성됩니다.";
 
         //when
-        List<Question> all_q = questionRepository.findAll();
-        Question q = all_q.get(1);
-        int test_question_id = q.getId();
-        int test_answer_id = answerRepository.save(Answer.builder()
-                .content(given_answer)
-                .createDate(LocalDateTime.now())
-                .question(q)
-                .build()).getId();
+        Question q = this.questionRepository.findById(2).get();
+        List<Answer> answerList = q.getAnswerList();
 
         //then
-        assertEquals(2,all_q.size());
-        assertEquals(test_question_id,answerRepository.findById(test_answer_id).get().getQuestion().getId());
+        assertEquals(1,answerList.size());
+        assertEquals(given_answer,answerList.get(0).getContent());
     }
 
 }

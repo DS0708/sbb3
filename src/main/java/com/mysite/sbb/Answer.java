@@ -26,9 +26,10 @@ public class Answer {
     private Question question;
 
     @Builder
-    public Answer(String content, LocalDateTime createDate){
+    public Answer(String content, LocalDateTime createDate, Question question){
         this.content = content;
         this.createDate = createDate;
+        this.question = question;
     }
 
 }

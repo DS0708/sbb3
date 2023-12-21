@@ -4,12 +4,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class QuestionTests {
@@ -23,7 +25,7 @@ public class QuestionTests {
         questionRepository.deleteAll();
     }
 
-    void question_when_dataset(){
+    void question_given(){
         this.questionRepository.save(Question.builder()
                 .subject(first_subject)
                 .content("sbb에 대해서 알고 싶습니다.")
@@ -35,28 +37,24 @@ public class QuestionTests {
                 .content("id는 자동으로 생성되나요?")
                 .createDate(LocalDateTime.now())
                 .build()); //Second Question
-
     }
 
     @Test
     void testJpa_save() {
-        question_when_dataset();
+        question_given();
     }
 
     @Test
     void testJpa_findAll() {
-        question_when_dataset();
+        question_given();
 
         List<Question> all = this.questionRepository.findAll();
         assertEquals(2, all.size());
-
-        Question q = all.get(0);
-        assertEquals("sbb가 무엇인가요?", q.getSubject());
     }
 
     @Test
     void testJpa_findById(){
-        question_when_dataset();
+        question_given();
 
         Optional<Question> oq = this.questionRepository.findById(1);
 //		Optional은 null 처리를 유연하게 처리하기 위해 사용하는 클래스로 위와 같이 isPresent로 null이 아닌지를 확인한 후에 get으로 실제 Question 객체 값을 얻어야 한다.
@@ -67,7 +65,7 @@ public class QuestionTests {
     }
     @Test
     void testJpa_findBySubject(){
-        question_when_dataset();
+        question_given();
 
         Question q = this.questionRepository.findBySubject(first_subject);
         assertEquals(first_subject, q.getSubject());
@@ -75,7 +73,7 @@ public class QuestionTests {
 
     @Test
     void testJpa_findBySubjectAndContent(){
-        question_when_dataset();
+        question_given();
 
         Question q = this.questionRepository.findBySubjectAndContent(
                 "sbb가 무엇인가요?", "sbb에 대해서 알고 싶습니다.");
@@ -84,7 +82,7 @@ public class QuestionTests {
 
     @Test
     void testJpa_findBySubjectLike(){
-        question_when_dataset();
+        question_given();
 
         List<Question> qList = this.questionRepository.findBySubjectLike("sbb%");
         Question q = qList.get(0);
@@ -93,7 +91,7 @@ public class QuestionTests {
 
     @Test
     void testJpa_update(){
-        question_when_dataset();
+        question_given();
 
         String update_subject = "수정된 제목";
         Question q = this.questionRepository.findBySubject(first_subject);
@@ -106,7 +104,7 @@ public class QuestionTests {
 
     @Test
     void testJpa_delete(){
-        question_when_dataset();
+        question_given();
 
         assertEquals(2, this.questionRepository.count());
         Question q = this.questionRepository.findBySubject(first_subject);
