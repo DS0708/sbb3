@@ -6,10 +6,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="question : ${questionList}">
-        <td th:text="${question.subject}"></td>
+    <tr th:each="question, index : ${questionList}">
+        <td>
+            <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+<!--            /question/detail/과 같은 문자열과 ${question.id}와 같은 자바 객체의 값을 더할 때는 반드시 다음처럼 |과 | 기호로 좌우를 감싸 주어야 한다.-->
+        </td>
         <td th:text="${question.createDate}"></td>
     </tr>
     </tbody>
 </table>
-
