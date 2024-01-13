@@ -7,7 +7,11 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
     <title>Hello, sbb!</title>
+    <!-- Bootstrap JS -->
+    <script defer th:src="@{/bootstrap.min.js}"></script>
 </head>
+<!-- 네비게이션바 -->
+<nav th:replace="~{navbar :: navbarFragment}"></nav>
 <body>
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 <th:block layout:fragment="content"></th:block>
