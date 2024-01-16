@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
@@ -44,4 +46,9 @@ public class SecurityConfig {
     스프링 시큐리티의 세부 설정은 @Bean 애너테이션을 통해
     SecurityFilterChain 빈을 생성하여 설정할 수 있다.
     */
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        //PasswordEncoder는 BCryptPasswordEncoder의 인터페이스
+        return new BCryptPasswordEncoder();
+    }
 }
