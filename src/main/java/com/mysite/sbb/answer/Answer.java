@@ -1,6 +1,7 @@
 package com.mysite.sbb.answer;
 
 import com.mysite.sbb.question.Question;
+import com.mysite.sbb.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,11 +26,16 @@ public class Answer {
     @ManyToOne
     private Question question;
 
+    @ManyToOne
+    private SiteUser author;
+
+
     @Builder
-    public Answer(String content, LocalDateTime createDate, Question question){
+    public Answer(String content, LocalDateTime createDate, Question question, SiteUser author){
         this.content = content;
         this.createDate = createDate;
         this.question = question;
+        this.author = author;
     }
 
 }

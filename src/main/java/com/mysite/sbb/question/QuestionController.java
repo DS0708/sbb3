@@ -1,14 +1,18 @@
 package com.mysite.sbb.question;
 
 import com.mysite.sbb.answer.AnswerForm;
+import com.mysite.sbb.user.SiteUser;
+import com.mysite.sbb.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/question")
@@ -17,6 +21,7 @@ import java.util.List;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final UserService userService;
 
     @GetMapping("/list")
     public String list(Model model,
@@ -39,6 +44,7 @@ public class QuestionController {
         return "question_detail";
     }
 
+    @PreAuthorize("isAuthenticated()") //@PreAuthorize("isAuthenticated()") 애너테이션이 붙은 메서드는 로그인한 경우에만 실행된다.
     @GetMapping("/create")
 //    public String questionCreate(){
 //        return "question_form";
@@ -52,6 +58,7 @@ public class QuestionController {
     왜냐하면 question_form.html은 [질문 등록하기] 버튼을 통해
     GET 방식으로 URL이 요청되더라도 th:object에 의해 QuestionForm 객체가 필요하기 때문이다. */
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("create")
 //    public String questionCreate(@RequestParam(value = "subject") String subject,
 //                                 @RequestParam(value = "content") String content){
@@ -60,22 +67,17 @@ public class QuestionController {
 //        return "redirect:/question/list";
 //    }
     public String questionCreate(@Valid QuestionForm questionForm,
-                                 BindingResult bindingResult){  //BindingResult 매개변수는 항상 @Valid 매개변수 바로 뒤에 위치해야 한다
+                                 BindingResult bindingResult, //BindingResult 매개변수는 항상 @Valid 매개변수 바로 뒤에 위치해야 한다
+                                 Principal principal){
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+
         if (bindingResult.hasErrors()){
             return "question_form";
         }
-        this.questionService.create(questionForm.getSubject(),questionForm.getContent());
+        this.questionService.create(questionForm.getSubject(),questionForm.getContent(),siteUser);
         return "redirect:/question/list";
     }
     /*questionCreate 메서드의 매개변수를 subject, content 대신 QuestionForm 객체로 변경했다.
     subject, content 항목을 지닌 폼이 전송되면 QuestionForm의 subject, content 속성이 자동으로 바인딩된다.
     이렇게 이름이 동일하면 함께 연결되어 묶이는 것이 바로 폼의 바인딩 기능이다. */
-
-
-//    @GetMapping("/question/insert_test")
-//    public String insert_test(){
-//        questionService.insert_test();
-//
-//        return "redirect:/";
-//    }
 }

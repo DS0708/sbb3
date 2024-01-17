@@ -1,6 +1,7 @@
 package com.mysite.sbb.question;
 
 import com.mysite.sbb.DataNotFoundException;
+import com.mysite.sbb.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,11 +32,12 @@ public class QuestionService {
         }
     }
 
-    public void create(String subject, String content){
+    public void create(String subject, String content, SiteUser author){
         this.questionRepository.save(Question.builder()
                 .subject(subject)
                 .content(content)
                 .createDate(LocalDateTime.now())
+                .author(author)
                 .build());
     }
 
@@ -51,11 +53,4 @@ public class QuestionService {
         return this.questionRepository.findAll(pageable);
     }
 
-//    public void insert_test() {
-//        this.questionRepository.save(Question.builder()
-//                .subject("sbb가 무엇인가요?")
-//                .content("sbb에 대해서 알고 싶습니다.")
-//                .createDate(LocalDateTime.now())
-//                .build());
-//    }
 }
