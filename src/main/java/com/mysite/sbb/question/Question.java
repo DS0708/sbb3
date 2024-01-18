@@ -25,6 +25,7 @@ public class Question {
     private String content;
 
     private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER) //test code에서 DB세션이 끊어지는 문제를 해결하기 위해 fetch = FetchType.EAGER
     private List<Answer> answerList;
@@ -41,8 +42,13 @@ public class Question {
         this.createDate = createDate;
         this.author = author;
     }
-
     public void updateSubject(String subject){
         this.subject = subject;
+    }
+
+    public void update(String subject, String content){
+        this.subject = subject;
+        this.content = content;
+        this.modifyDate = LocalDateTime.now();
     }
 }

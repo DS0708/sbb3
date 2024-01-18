@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,6 +52,15 @@ public class QuestionService {
 //      page는 조회할 페이지의 번호이고 10은 한 페이지에 보여 줄 게시물의 개수를 의미
 
         return this.questionRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public void modify(Question question, String subject, String content) {
+        question.update(subject,content);
+    }
+
+    public void delete(Question question) {
+        this.questionRepository.delete(question);
     }
 
 }

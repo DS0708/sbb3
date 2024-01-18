@@ -22,6 +22,7 @@ public class Answer {
     private String content;
 
     private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
 
     @ManyToOne
     private Question question;
@@ -29,13 +30,17 @@ public class Answer {
     @ManyToOne
     private SiteUser author;
 
-
     @Builder
     public Answer(String content, LocalDateTime createDate, Question question, SiteUser author){
         this.content = content;
         this.createDate = createDate;
         this.question = question;
         this.author = author;
+    }
+
+    public void update(String content){
+        this.content = content;
+        this.modifyDate = LocalDateTime.now();
     }
 
 }
