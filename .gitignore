@@ -39,3 +39,6 @@ out/
 ### BootStrap ###
 bootstrap.min.css
 bootstrap.min.js
+
+### scripts ###
+scripts/

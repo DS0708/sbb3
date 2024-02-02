@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.mysite'
-version = '0.0.3-SNAPSHOT'
+version = '0.0.4-SNAPSHOT'
 
 java {
 	sourceCompatibility = '17'
@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.commonmark:commonmark:0.21.0'
+    runtimeOnly 'org.postgresql:postgresql'
 
 	testImplementation 'com.h2database:h2'
 }
