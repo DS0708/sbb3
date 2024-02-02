@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -44,7 +45,7 @@ public class Answer {
 
     public void update(String content){
         this.content = content;
-        this.modifyDate = LocalDateTime.now();
+        this.modifyDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
 }

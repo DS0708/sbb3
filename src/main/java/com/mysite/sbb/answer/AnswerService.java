@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class AnswerService {
     public Answer create(Question question, String content, SiteUser author){
         return this.answerRepository.save(Answer.builder()
                 .content(content)
-                .createDate(LocalDateTime.now())
+                .createDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .question(question)
                 .author(author)
                 .build());

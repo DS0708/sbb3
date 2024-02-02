@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
 
@@ -53,6 +54,6 @@ public class Question {
     public void update(String subject, String content){
         this.subject = subject;
         this.content = content;
-        this.modifyDate = LocalDateTime.now();
+        this.modifyDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }
