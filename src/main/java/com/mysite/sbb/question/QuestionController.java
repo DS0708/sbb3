@@ -5,6 +5,7 @@ import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.List;
 
+@Slf4j
 @RequestMapping("/question")
 @RequiredArgsConstructor
 @Controller
@@ -32,6 +33,22 @@ public class QuestionController {
 //        Model 객체는 자바 클래스와 템플릿 간의 연결고리 역할을 한다. Model 객체에 값을 담아두면 템플릿에서 그 값을 사용할 수 있다.
 //        List<Question> questionList = this.questionService.getList();
 //        model.addAttribute("questionList",questionList);
+
+        //logging
+        log.info("page:{}, kw:{}", page, kw);
+        /*
+        *  로그 레벨(log level)은 다음과 같이 6단계로 구성되며,
+        *  각 단계의 로그는 log.trace, log.debug, log.info,
+        *  log.warn, log.error, log.fatal과 같이 출력
+        *  log level 순서 : TRACE < DEBUG < INFO < WARN < ERROR < FATAL
+         * */
+        /*
+        * 만약 application-prod.properties 파일에
+        * logging.level.root=info로 설정하면
+        * TRACE, DEBUG 로그는 출력되지 않고 INFO 이상의 로그만 출력.
+        * logging.level.root의 기본값은 info
+        * */
+
 
         //Paging
         Page<Question> paging = this.questionService.getList(page,kw);

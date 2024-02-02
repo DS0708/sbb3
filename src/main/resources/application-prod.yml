@@ -12,12 +12,24 @@ spring:
     username: sa
     password: 1234
 
-  # JPA
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true
-        show_sql: true
+# JPA
+jpa:
+  properties:
     hibernate:
-      ddl-auto: update
+      dialect: org.hibernate.dialect.H2Dialect
+      format_sql: true
+      show_sql: true
+  hibernate:
+    ddl-auto: update
+
+# logging
+logging:
+  logback:
+    rollingpolicy:
+      max-history: 30
+      max-file-size: 100MB
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
+  file:
+    name: logs/sbb.log
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
